@@ -178,7 +178,7 @@ public class LinkerFrame extends JFrame implements ActionListener {
 			HashMap<String, IdentifiedNode> nodes = LinkerMain.identifyUniqueNodes(LinkerMain.nodeDefinitions, LinkerMain.pData);
 			JOptionPane.showMessageDialog(this, "Number of Nodes Found: " + nodes.size());
 			
-			NetworkSelectionDialog netD = new NetworkSelectionDialog(null, nodes);
+			NetworkSelectionDialog netD = new NetworkSelectionDialog(this, nodes);
 			netD.setVisible(true);
 			//System.out.println("Number of Nodes: " + nodes.size());
 			try {

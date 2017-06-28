@@ -99,6 +99,11 @@ public class AnonymizerMain implements ActionListener {
 	 * If a partner's name wasn't provided, then we go with "Unknown"
 	 */
 	static String unknownActor = "Unknown";
+	
+	/**
+	 * If a partner's role wasn't provided, then we go with "Unknown"
+	 */
+	static String unknownRole = "Unknown";
 
 	/**
 	 * When we clean names and roles, we add this to the end of the index question
@@ -524,13 +529,17 @@ public class AnonymizerMain implements ActionListener {
 								// We have a name and a role
 								String[] partner = partnerData.split(entryDelimiter);
 								String pName = partner[0].trim();
-								String pRole = partner[1].trim();
+								String pRole = AnonymizerMain.unknownRole;
+								if(partner.length > 1) {
+									pRole = partner[1].trim();
+									if(pRole.length() <= 3) {
+										pRole = pRole.toUpperCase();
+									}
+								}
 								if(pName.length() <= 3) {
 									pName = pName.toUpperCase();
 								}
-								if(pRole.length() <= 3) {
-									pRole = pRole.toUpperCase();
-								}
+								
 								participant.put(iPartner + partnerNameSuffix, pName);
 								participant.put(iPartner + partnerRoleSuffix, pRole);
 								
@@ -582,6 +591,7 @@ public class AnonymizerMain implements ActionListener {
 					} catch (Exception e) {
 						String message = "\tError Parsing Line " + row + ": " + iPartner
 								+ " - " + partnerData;
+						e.printStackTrace();
 						textField.setText(textField.getText() + "\n" + message);
 					}
 				}
@@ -590,6 +600,7 @@ public class AnonymizerMain implements ActionListener {
 			}
 		}
 		for(String n : columnsIndicatingRespondent) {
+			if(participant.containsKey(n)) {
 			participant.put(n + "_Role", implicitRole);
 			String nameData = participant.get(n).trim();
 			CandidateIdentifier cIDName = new CandidateIdentifier(nameData);
@@ -598,7 +609,7 @@ public class AnonymizerMain implements ActionListener {
 				candidateNameMap.put(nameData, cIDName);
 				candidateNames.add(cIDName);
 			}
-			
+			}
 		}
 	}
 
